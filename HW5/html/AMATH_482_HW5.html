@@ -1,0 +1,288 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>AMATH_482_HW5</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-13"><meta name="DC.source" content="AMATH_482_HW5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Load and process data</a></li><li><a href="#3">Fully-connected neural network</a></li><li><a href="#4">Plot confusion matrix of train and validation data</a></li><li><a href="#5">Plot confusion matrix of test data</a></li><li><a href="#6">Convolutional neural network</a></li><li><a href="#7">Plot confusion matrix of train and validation data</a></li><li><a href="#8">Plot confusion matrix of test data</a></li></ul></div><pre class="codeinput">clc; clear <span class="string">all</span>; close <span class="string">all</span>;
+</pre><h2 id="2">Load and process data</h2><pre class="codeinput">load(<span class="string">'fashion_mnist'</span>);
+
+X_valid = im2double(X_train(1:5000, :, :));
+X_train = im2double(X_train(5001:end, :, :));
+X_test = im2double(X_test);
+
+X_valid = reshape(X_valid, [5000 28 28 1]);
+X_train = reshape(X_train, [55000 28 28 1]);
+X_test = reshape(X_test, [10000 28 28 1]);
+
+X_valid = permute(X_valid, [2 3 4 1]);
+X_train = permute(X_train, [2 3 4 1]);
+X_test = permute(X_test, [2 3 4 1]);
+
+y_valid = categorical(y_train(:, 1:5000))';
+y_train = categorical(y_train(:, 5001:end))';
+y_test = categorical(y_test)';
+</pre><h2 id="3">Fully-connected neural network</h2><pre class="codeinput">layers = [imageInputLayer([28, 28, 1])
+    fullyConnectedLayer(500)
+    reluLayer
+    fullyConnectedLayer(250)
+    reluLayer
+    fullyConnectedLayer(10)
+    softmaxLayer
+    classificationLayer];
+
+options = trainingOptions(<span class="string">'adam'</span>,<span class="keyword">...</span>
+    <span class="string">'MaxEpochs'</span>, 5,<span class="keyword">...</span>
+    <span class="string">'InitialLearnRate'</span>, 7e-4,<span class="keyword">...</span>
+    <span class="string">'L2Regularization'</span>, 7e-4,<span class="keyword">...</span>
+    <span class="string">'ValidationData'</span>, {X_valid, y_valid},<span class="keyword">...</span>
+    <span class="string">'Verbose'</span>, false,<span class="keyword">...</span>
+    <span class="string">'Plots'</span>, <span class="string">'training-progress'</span>);
+
+net = trainNetwork(X_train, y_train, layers, options);
+</pre><h2 id="4">Plot confusion matrix of train and validation data</h2><pre class="codeinput">figure(1)
+y_pred = classify(net, X_train);
+plotconfusion(y_train, y_pred);
+title(<span class="string">'Confusion Matrix of Train Data'</span>);
+
+figure(2)
+y_pred = classify(net, X_valid);
+plotconfusion(y_valid, y_pred);
+title(<span class="string">'Confusion Matrix of Validation Data'</span>);
+</pre><h2 id="5">Plot confusion matrix of test data</h2><pre class="codeinput">figure(3)
+y_pred = classify(net, X_test);
+plotconfusion(y_test, y_pred);
+title(<span class="string">'Confusion Matrix of Test Data'</span>);
+</pre><h2 id="6">Convolutional neural network</h2><pre class="codeinput">layers1 = [imageInputLayer([28, 28, 1])
+    convolution2dLayer([5 5], 6, <span class="string">'Padding'</span>, <span class="string">'same'</span>)
+    tanhLayer
+    convolution2dLayer([5 5], 6, <span class="string">'Padding'</span>, <span class="string">'same'</span>)
+    tanhLayer
+    averagePooling2dLayer([2 2], <span class="string">'Padding'</span>, <span class="string">'same'</span>, <span class="string">'Stride'</span>, [2 2])
+    convolution2dLayer([5 5], 6, <span class="string">'Padding'</span>, <span class="string">'same'</span>)
+    tanhLayer
+    fullyConnectedLayer(250)
+    leakyReluLayer
+    fullyConnectedLayer(10)
+    softmaxLayer
+    classificationLayer];
+
+<span class="comment">% layers1 = [imageInputLayer([28, 28, 1])</span>
+<span class="comment">%     convolution2dLayer([28 28], 3, 'Padding', 'same')</span>
+<span class="comment">%      ([14 14], 3, 'Padding', 'same', 'Stride', [2 2])</span>
+<span class="comment">%     tanhLayer</span>
+<span class="comment">%     fullyConnectedLayer(20)</span>
+<span class="comment">%     reluLayer</span>
+<span class="comment">%     fullyConnectedLayer(10)</span>
+<span class="comment">%     softmaxLayer</span>
+<span class="comment">%     classificationLayer];</span>
+
+<span class="comment">%     convolution2dLayer([5 5], 6, 'Padding', 'same')</span>
+<span class="comment">%     tanhLayer</span>
+<span class="comment">%     averagePooling2dLayer([2 2], 'Padding', 'same', 'Stride', [2 2])</span>
+<span class="comment">%     convolution2dLayer([5 5], 6, 'Padding', 'same')</span>
+<span class="comment">%     tanhLayer</span>
+
+options1 = trainingOptions(<span class="string">'adam'</span>,<span class="keyword">...</span>
+    <span class="string">'MaxEpochs'</span>, 5,<span class="keyword">...</span>
+    <span class="string">'InitialLearnRate'</span>, 1e-3,<span class="keyword">...</span>
+    <span class="string">'L2Regularization'</span>, 1e-4,<span class="keyword">...</span>
+    <span class="string">'ValidationData'</span>, {X_valid, y_valid},<span class="keyword">...</span>
+    <span class="string">'Verbose'</span>, false,<span class="keyword">...</span>
+    <span class="string">'Plots'</span>, <span class="string">'training-progress'</span>);
+
+net1 = trainNetwork(X_train, y_train, layers1, options1);
+</pre><h2 id="7">Plot confusion matrix of train and validation data</h2><pre class="codeinput">figure(4)
+y_pred1 = classify(net1, X_train);
+plotconfusion(y_train, y_pred1);
+title(<span class="string">'Confusion Matrix of Train Data'</span>);
+
+figure(5)
+y_pred1 = classify(net1, X_valid);
+plotconfusion(y_valid, y_pred1);
+title(<span class="string">'Confusion Matrix of Validation Data'</span>);
+</pre><h2 id="8">Plot confusion matrix of test data</h2><pre class="codeinput">figure(6)
+y_pred1 = classify(net1, X_test);
+plotconfusion(y_test, y_pred1);
+title(<span class="string">'Confusion Matrix of Test Data'</span>);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clc; clear all; close all;
+
+%% Load and process data
+load('fashion_mnist');
+
+X_valid = im2double(X_train(1:5000, :, :));
+X_train = im2double(X_train(5001:end, :, :));
+X_test = im2double(X_test);
+
+X_valid = reshape(X_valid, [5000 28 28 1]);
+X_train = reshape(X_train, [55000 28 28 1]);
+X_test = reshape(X_test, [10000 28 28 1]);
+
+X_valid = permute(X_valid, [2 3 4 1]);
+X_train = permute(X_train, [2 3 4 1]);
+X_test = permute(X_test, [2 3 4 1]);
+
+y_valid = categorical(y_train(:, 1:5000))';
+y_train = categorical(y_train(:, 5001:end))';
+y_test = categorical(y_test)';
+
+%% Fully-connected neural network
+layers = [imageInputLayer([28, 28, 1])
+    fullyConnectedLayer(500)
+    reluLayer
+    fullyConnectedLayer(250)
+    reluLayer
+    fullyConnectedLayer(10)
+    softmaxLayer
+    classificationLayer];
+
+options = trainingOptions('adam',...
+    'MaxEpochs', 5,...
+    'InitialLearnRate', 7e-4,...
+    'L2Regularization', 7e-4,...
+    'ValidationData', {X_valid, y_valid},...
+    'Verbose', false,...
+    'Plots', 'training-progress');
+
+net = trainNetwork(X_train, y_train, layers, options);
+
+%% Plot confusion matrix of train and validation data
+figure(1)
+y_pred = classify(net, X_train);
+plotconfusion(y_train, y_pred);
+title('Confusion Matrix of Train Data');
+
+figure(2)
+y_pred = classify(net, X_valid);
+plotconfusion(y_valid, y_pred);
+title('Confusion Matrix of Validation Data');
+
+%% Plot confusion matrix of test data
+figure(3)
+y_pred = classify(net, X_test);
+plotconfusion(y_test, y_pred);
+title('Confusion Matrix of Test Data');
+
+%% Convolutional neural network
+layers1 = [imageInputLayer([28, 28, 1])
+    convolution2dLayer([5 5], 6, 'Padding', 'same')
+    tanhLayer
+    convolution2dLayer([5 5], 6, 'Padding', 'same')
+    tanhLayer
+    averagePooling2dLayer([2 2], 'Padding', 'same', 'Stride', [2 2])
+    convolution2dLayer([5 5], 6, 'Padding', 'same')
+    tanhLayer
+    fullyConnectedLayer(250)
+    leakyReluLayer
+    fullyConnectedLayer(10)
+    softmaxLayer
+    classificationLayer];
+
+% layers1 = [imageInputLayer([28, 28, 1])
+%     convolution2dLayer([28 28], 3, 'Padding', 'same')
+%      ([14 14], 3, 'Padding', 'same', 'Stride', [2 2])
+%     tanhLayer
+%     fullyConnectedLayer(20)
+%     reluLayer
+%     fullyConnectedLayer(10)
+%     softmaxLayer
+%     classificationLayer];
+
+%     convolution2dLayer([5 5], 6, 'Padding', 'same')
+%     tanhLayer
+%     averagePooling2dLayer([2 2], 'Padding', 'same', 'Stride', [2 2])
+%     convolution2dLayer([5 5], 6, 'Padding', 'same')
+%     tanhLayer
+
+options1 = trainingOptions('adam',...
+    'MaxEpochs', 5,...
+    'InitialLearnRate', 1e-3,...
+    'L2Regularization', 1e-4,...
+    'ValidationData', {X_valid, y_valid},...
+    'Verbose', false,...
+    'Plots', 'training-progress');
+
+net1 = trainNetwork(X_train, y_train, layers1, options1);
+
+%% Plot confusion matrix of train and validation data
+figure(4)
+y_pred1 = classify(net1, X_train);
+plotconfusion(y_train, y_pred1);
+title('Confusion Matrix of Train Data');
+
+figure(5)
+y_pred1 = classify(net1, X_valid);
+plotconfusion(y_valid, y_pred1);
+title('Confusion Matrix of Validation Data');
+
+%% Plot confusion matrix of test data
+figure(6)
+y_pred1 = classify(net1, X_test);
+plotconfusion(y_test, y_pred1);
+title('Confusion Matrix of Test Data');
+##### SOURCE END #####
+--></body></html>

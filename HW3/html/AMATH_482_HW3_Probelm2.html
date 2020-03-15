@@ -1,0 +1,359 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>AMATH_482_HW3_Probelm2</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-02-21"><meta name="DC.source" content="AMATH_482_HW3_Probelm2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Load test 2 data</a></li><li><a href="#3">Obtain the x and y variable data points</a></li><li><a href="#4">Reshape data</a></li></ul></div><pre class="codeinput">clc; clear <span class="string">all</span>; close <span class="string">all</span>
+</pre><h2 id="2">Load test 2 data</h2><pre class="codeinput">load(<span class="string">'cam1_2.mat'</span>)
+<span class="comment">% implay(vidFrames1_2)</span>
+load(<span class="string">'cam2_2.mat'</span>)
+<span class="comment">% implay(vidFrames2_2)</span>
+load(<span class="string">'cam3_2.mat'</span>)
+<span class="comment">% implay(vidFrames3_2)</span>
+</pre><h2 id="3">Obtain the x and y variable data points</h2><pre class="codeinput">numFrames12 = size(vidFrames1_2, 4);
+numFrames22 = size(vidFrames2_2, 4);
+numFrames32 = size(vidFrames3_2, 4);
+
+x12 = zeros(numFrames12, 1);
+y12 = x12;
+bottom = 410;
+top = 200;
+left = 330;
+right = 420;
+<span class="keyword">for</span> i = 1 : numFrames12
+    X12 = double(rgb2gray(vidFrames1_2(:, :, :, i)));
+    X12(:, 1:left) = 0;
+    X12(:, right:end) = 0;
+    X12(1:top, :) = 0;
+    X12(bottom:end, :) = 0;
+    [M, I] = max(max(X12));
+    [row, col] = find(X12 &gt;= 0.9*M);
+    x12(i) = mean(col);
+    y12(i) = mean(row);
+<span class="keyword">end</span>
+x12 = x12 - mean(x12);
+y12 = y12 - mean(y12);
+[M, I] = max(y12(1:50));
+x12 = x12(I:end);
+y12 = y12(I:end);
+
+
+figure(1)
+set(gca, <span class="string">'FontSize'</span>, 15)
+sgtitle(<span class="string">'Test 2'</span>);
+subplot(1, 3, 1)
+plot(x12);
+hold <span class="string">on</span>;
+plot(y12);
+legend(<span class="string">'X1'</span>, <span class="string">'Y1'</span>);
+title(<span class="string">'Camera 1'</span>);
+xlabel(<span class="string">'Frames'</span>);
+ylabel(<span class="string">'Pixel position'</span>);
+
+x22 = zeros(numFrames22, 1);
+y22 = x22;
+bottom = 370;
+top = 80;
+left = 210;
+right = 390;
+<span class="keyword">for</span> i = 1 : numFrames22
+    X22 = double(rgb2gray(vidFrames2_2(:, :, :, i)));
+    X22(:, 1:left) = 0;
+    X22(:, right:end) = 0;
+    X22(1:top, :) = 0;
+    X22(bottom:end, :) = 0;
+    [M, I] = max(max(X22));
+    [row, col] = find(X22 &gt;= 0.95*M);
+    x22(i) = mean(col);
+    y22(i) = mean(row);
+<span class="keyword">end</span>
+x22 = x22 - mean(x22);
+y22 = y22 - mean(y22);
+[M, I] = max(y22(1:50));
+x22 = x22(I:end);
+y22 = y22(I:end);
+
+subplot(1, 3, 2)
+plot(x22);
+hold <span class="string">on</span>;
+plot(y22);
+legend(<span class="string">'X2'</span>, <span class="string">'Y2'</span>);
+title(<span class="string">'Camera 2'</span>);
+xlabel(<span class="string">'Frames'</span>);
+ylabel(<span class="string">'Pixel position'</span>);
+
+x32 = zeros(numFrames32, 1);
+y32 = x32;
+bottom = 320;
+top = 200;
+left = 250;
+right = 500;
+<span class="keyword">for</span> i = 1 : numFrames32
+    X32 = double(rgb2gray(vidFrames3_2(:, :, :, i)));
+    X32(:, 1:left) = 0;
+    X32(:, right:end) = 0;
+    X32(1:top, :) = 0;
+    X32(bottom:end, :) = 0;
+    [M, I] = max(max(X32));
+    [row, col] = find(X32 &gt;= 0.9*M);
+    y32(i) = mean(col);
+    x32(i) = mean(row);
+<span class="keyword">end</span>
+x32 = x32 - mean(x32);
+y32 = y32 - mean(y32);
+[M, I] = max(y32(1:50));
+x32 = x32(I:end);
+y32 = y32(I:end);
+
+subplot(1, 3, 3)
+plot(x32);
+hold <span class="string">on</span>;
+plot(y32);
+legend(<span class="string">'X3'</span>, <span class="string">'Y3'</span>);
+title(<span class="string">'Camera 3'</span>);
+xlabel(<span class="string">'Frames'</span>);
+ylabel(<span class="string">'Pixel position'</span>);
+saveas(gcf, <span class="string">'Position_Test2.jpg'</span>);
+</pre><img vspace="5" hspace="5" src="AMATH_482_HW3_Probelm2_01.png" alt=""> <h2 id="4">Reshape data</h2><pre class="codeinput">n = min([length(y12), length(y22), length(y32)]);
+X = [x12(1:n)'; y12(1:n)'; x22(1:n)'; y22(1:n)'; x32(1:n)'; y32(1:n)'];
+[U, S, V] = svd(X/sqrt(n - 1), <span class="string">'econ'</span>);
+lambda = diag(S).^2;
+Y = U'*X;
+
+figure(2)
+set(gca, <span class="string">'FontSize'</span>, 10)
+lambdaSum = sum(lambda);
+plot(lambda./lambdaSum, <span class="string">'r*'</span>);
+title(<span class="string">'Normalized Diagonal Variance For Test 2'</span>);
+xlabel(<span class="string">'Principal Component'</span>);
+ylabel(<span class="string">'Energy Percentage'</span>);
+saveas(gcf, <span class="string">'Variance_Test2.jpg'</span>);
+
+figure(3)
+set(gca, <span class="string">'FontSize'</span>, 10)
+plot(Y(1, :));
+hold <span class="string">on</span>;
+plot(Y(2, :));
+plot(Y(3, :));
+plot(Y(4, :));
+plot(Y(5, :));
+plot(Y(6, :));
+legend(<span class="string">'Component 1'</span>, <span class="string">'Component 2'</span>, <span class="string">'Component 3'</span>, <span class="string">'Component 4'</span>, <span class="string">'Component 5'</span>, <span class="string">'Component 6'</span>);
+title(<span class="string">'Pricipal Component Projection For Test 2'</span>);
+xlabel(<span class="string">'Frames'</span>);
+ylabel(<span class="string">'Pixel Position'</span>);
+saveas(gcf, <span class="string">'Projection_Test2.jpg'</span>);
+</pre><img vspace="5" hspace="5" src="AMATH_482_HW3_Probelm2_02.png" alt=""> <img vspace="5" hspace="5" src="AMATH_482_HW3_Probelm2_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clc; clear all; close all
+
+%% Load test 2 data
+load('cam1_2.mat')
+% implay(vidFrames1_2)
+load('cam2_2.mat')
+% implay(vidFrames2_2)
+load('cam3_2.mat')
+% implay(vidFrames3_2)
+
+
+%% Obtain the x and y variable data points
+numFrames12 = size(vidFrames1_2, 4);
+numFrames22 = size(vidFrames2_2, 4);
+numFrames32 = size(vidFrames3_2, 4);
+
+x12 = zeros(numFrames12, 1);
+y12 = x12;
+bottom = 410;
+top = 200;
+left = 330;
+right = 420;
+for i = 1 : numFrames12
+    X12 = double(rgb2gray(vidFrames1_2(:, :, :, i)));
+    X12(:, 1:left) = 0;
+    X12(:, right:end) = 0;
+    X12(1:top, :) = 0;
+    X12(bottom:end, :) = 0;
+    [M, I] = max(max(X12));
+    [row, col] = find(X12 >= 0.9*M);
+    x12(i) = mean(col);
+    y12(i) = mean(row);
+end
+x12 = x12 - mean(x12);
+y12 = y12 - mean(y12);
+[M, I] = max(y12(1:50));
+x12 = x12(I:end);
+y12 = y12(I:end);
+
+
+figure(1)
+set(gca, 'FontSize', 15)
+sgtitle('Test 2');
+subplot(1, 3, 1)
+plot(x12);
+hold on;
+plot(y12);
+legend('X1', 'Y1');
+title('Camera 1');
+xlabel('Frames');
+ylabel('Pixel position');
+
+x22 = zeros(numFrames22, 1);
+y22 = x22;
+bottom = 370;
+top = 80;
+left = 210;
+right = 390;
+for i = 1 : numFrames22
+    X22 = double(rgb2gray(vidFrames2_2(:, :, :, i)));
+    X22(:, 1:left) = 0;
+    X22(:, right:end) = 0;
+    X22(1:top, :) = 0;
+    X22(bottom:end, :) = 0;
+    [M, I] = max(max(X22));
+    [row, col] = find(X22 >= 0.95*M);
+    x22(i) = mean(col);
+    y22(i) = mean(row);
+end
+x22 = x22 - mean(x22);
+y22 = y22 - mean(y22);
+[M, I] = max(y22(1:50));
+x22 = x22(I:end);
+y22 = y22(I:end);
+
+subplot(1, 3, 2)
+plot(x22);
+hold on;
+plot(y22);
+legend('X2', 'Y2');
+title('Camera 2');
+xlabel('Frames');
+ylabel('Pixel position');
+
+x32 = zeros(numFrames32, 1);
+y32 = x32;
+bottom = 320;
+top = 200;
+left = 250;
+right = 500;
+for i = 1 : numFrames32
+    X32 = double(rgb2gray(vidFrames3_2(:, :, :, i)));
+    X32(:, 1:left) = 0;
+    X32(:, right:end) = 0;
+    X32(1:top, :) = 0;
+    X32(bottom:end, :) = 0;
+    [M, I] = max(max(X32));
+    [row, col] = find(X32 >= 0.9*M);
+    y32(i) = mean(col);
+    x32(i) = mean(row);
+end
+x32 = x32 - mean(x32);
+y32 = y32 - mean(y32);
+[M, I] = max(y32(1:50));
+x32 = x32(I:end);
+y32 = y32(I:end);
+
+subplot(1, 3, 3)
+plot(x32);
+hold on;
+plot(y32);
+legend('X3', 'Y3');
+title('Camera 3');
+xlabel('Frames');
+ylabel('Pixel position');
+saveas(gcf, 'Position_Test2.jpg');
+
+%% Reshape data
+n = min([length(y12), length(y22), length(y32)]);
+X = [x12(1:n)'; y12(1:n)'; x22(1:n)'; y22(1:n)'; x32(1:n)'; y32(1:n)'];
+[U, S, V] = svd(X/sqrt(n - 1), 'econ');
+lambda = diag(S).^2;
+Y = U'*X;
+
+figure(2)
+set(gca, 'FontSize', 10)
+lambdaSum = sum(lambda);
+plot(lambda./lambdaSum, 'r*');
+title('Normalized Diagonal Variance For Test 2');
+xlabel('Principal Component');
+ylabel('Energy Percentage');
+saveas(gcf, 'Variance_Test2.jpg');
+
+figure(3)
+set(gca, 'FontSize', 10)
+plot(Y(1, :));
+hold on;
+plot(Y(2, :));
+plot(Y(3, :));
+plot(Y(4, :));
+plot(Y(5, :));
+plot(Y(6, :));
+legend('Component 1', 'Component 2', 'Component 3', 'Component 4', 'Component 5', 'Component 6');
+title('Pricipal Component Projection For Test 2');
+xlabel('Frames');
+ylabel('Pixel Position');
+saveas(gcf, 'Projection_Test2.jpg');
+##### SOURCE END #####
+--></body></html>
